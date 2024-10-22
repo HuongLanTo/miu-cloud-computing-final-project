@@ -1,0 +1,75 @@
+AWSTemplateFormatVersion: '2010-09-09'
+Description: CloudFormation template to create an S3 bucket and a CloudFront distribution with an Origin Access Identity for secure access
+
+Parameters:
+  S3BucketName:
+    Type: String
+    Description: The name of the S3 bucket to create for hosting the project
+
+Resources:
+  MyS3FinalBucket:
+    Type: AWS::S3::Bucket
+    Properties:
+      BucketName: !Ref S3BucketName
+      AccessControl: Private
+      WebsiteConfiguration:
+        IndexDocument: index.html
+    DeletionPolicy: Retain
+
+  MyBucketPolicy:
+    Type: AWS::S3::BucketPolicy
+    Properties:
+      Bucket: !Ref MyS3FinalBucket
+      PolicyDocument:
+        Statement:
+          - Action: s3:GetObject
+            Effect: Allow
+            Resource: !Sub ${MyS3FinalBucket.Arn}/*
+            Principal:
+              CanonicalUser: !GetAtt MyCloudFrontOAI.S3CanonicalUserId
+    DeletionPolicy: Retain
+
+  MyCloudFrontOAI:
+    Type: AWS::CloudFront::CloudFrontOriginAccessIdentity
+    Properties:
+      CloudFrontOriginAccessIdentityConfig:
+        Comment: Access Identity for S3 bucket
+    DeletionPolicy: Retain
+
+  MyCloudFrontDistribution:
+    Type: AWS::CloudFront::Distribution
+    Properties:
+      DistributionConfig:
+        Origins:
+          - Id: S3Origin
+            DomainName: !GetAtt MyS3FinalBucket.DomainName
+            S3OriginConfig:
+              OriginAccessIdentity: !Join
+                - ''
+                - - origin-access-identity/cloudfront/
+                  - !Ref MyCloudFrontOAI
+        Enabled: true
+        DefaultRootObject: index.html
+        DefaultCacheBehavior:
+          TargetOriginId: S3Origin
+          ViewerProtocolPolicy: redirect-to-https
+          AllowedMethods:
+            - GET
+            - HEAD
+          CachedMethods:
+            - GET
+            - HEAD
+          ForwardedValues:
+            QueryString: false
+            Cookies:
+              Forward: none
+        ViewerCertificate:
+          CloudFrontDefaultCertificate: true
+    DeletionPolicy: Retain
+
+Outputs:
+  CloudFrontURL:
+    Description: The CloudFront distribution URL
+    Value: !Sub "https://${MyCloudFrontDistribution.DomainName}"
+    Export:
+      Name: FinalCloudFrontURL
