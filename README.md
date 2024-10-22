@@ -1,4 +1,6 @@
 # CS516-2024-10A-10D-01-Final-Project
+Name: Huong Lan To
+ID: 617323
 ## Requirements
 1. Develop an Auth application with the following features
 * SignUp: Users can use this feature to register an account which contains email (as ID), password, name, profileImage.
