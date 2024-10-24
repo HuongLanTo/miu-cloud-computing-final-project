@@ -12,7 +12,7 @@ Resources:
   ImageBucket:
     Type: AWS::S3::Bucket
     Properties:
-      BucketName: !Sub 'huonglanto-final-bucket-profile-image-store'
+      BucketName: !Sub 'huonglanto-final-bucket-profile-image-store-2'
       VersioningConfiguration:
         Status: Enabled
       PublicAccessBlockConfiguration:
@@ -50,7 +50,7 @@ Resources:
   UserTable:
     Type: AWS::DynamoDB::Table
     Properties:
-      TableName: FinalUsers
+      TableName: FinalUsers2
       AttributeDefinitions:
         - AttributeName: email
           AttributeType: S
@@ -63,7 +63,7 @@ Resources:
   LambdaExecutionRole:
     Type: AWS::IAM::Role
     Properties:
-      RoleName: "final-lambda-role"
+      RoleName: "final-lambda-role-2"
       AssumeRolePolicyDocument:
         Version: '2012-10-17'
         Statement:
@@ -100,7 +100,7 @@ Resources:
   SignUpFunction:
     Type: "AWS::Lambda::Function"
     Properties:
-      FunctionName: "FinalSignUpFunction"
+      FunctionName: "FinalSignUpFunction2"
       Handler: "index.handler"
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
@@ -117,7 +117,7 @@ Resources:
   LoginFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: FinalLoginFunction
+      FunctionName: FinalLoginFunction2
       Handler: index.handler
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
@@ -134,7 +134,7 @@ Resources:
   ProfileFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: FinalProfileFunction
+      FunctionName: FinalProfileFunction2
       Handler: index.handler
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
@@ -151,7 +151,7 @@ Resources:
   UploadImageFunction:
     Type: AWS::Lambda::Function
     Properties:
-      FunctionName: FinalUploadImageFunction
+      FunctionName: FinalUploadImageFunction2
       Handler: index.handler
       Role: !GetAtt LambdaExecutionRole.Arn
       Code:
@@ -168,7 +168,7 @@ Resources:
   ApiGateway:
     Type: AWS::ApiGateway::RestApi
     Properties:
-      Name: "FinalAPIs"
+      Name: "FinalAPIs2"
       Description: API for handling user signup, login, and profile management
       FailOnWarnings: true
 

@@ -1,10 +1,10 @@
 # Set up variables
-STACK_NAME=huonglanto-final-stack-be
+STACK_NAME=huonglanto-final-stack-be-2
 REGION=us-east-1
 CLI_PROFILE=myprofile
 
 TEMPLATE_FILE=cloudformation-be.yaml
-API_BUCKET_NAME="huonglanto-final-bucket-apis"
+API_BUCKET_NAME="huonglanto-final-bucket-apis-2"
 FOLDER_TO_UPLOAD="zip"  
 
 # Check if the S3 bucket already exists
